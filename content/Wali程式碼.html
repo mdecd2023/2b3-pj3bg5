@@ -2,7 +2,7 @@
         <head>
         <title>pj3bg5</title>
         <meta charset="utf-8">
-<meta property="head" content="H2">
+<meta property="head" content="H1">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -141,18 +141,58 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">分配工作 << <a href='分配工作.html'>Previous</a> <a href='Wali程式碼.html'>Next</a> >> Wali程式碼<br /><h1>會議記錄</h1>
-<p>5/23開會目的:各自設計一個球員</p>
-<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/zn2uJK3RXy8" title="YouTube video player" width="560"></iframe></p>
-<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/pC7qJZ27Oq4" title="YouTube video player" width="560"></iframe></p>
-<p>5/24開會目的:將設計好的球員加上輪子匯入CoppeliaSim嘗試</p>
-<p></p>
-<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/YiWoj-0h3D8" title="YouTube video player" width="560"></iframe></p>
-<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/dU6igHDn9wQ" title="YouTube video player" width="560"></iframe></p>
-<p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/1Y7upHTy7Bg" title="YouTube video player" width="560"></iframe></p>
-<p></p>
-<p>5月31日:把各自的機器人做修改並上傳，我們把場地跟球框重畫了，之前是場地球框分開畫，現在我們畫在一起這樣在協同的過程中比較方便進行，最後有讓我們的機器人裝上軸並試著走走看<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/MDRZOEa35hU" title="YouTube video player" width="560"></iframe></p>
-<br />分配工作 << <a href='分配工作.html'>Previous</a> <a href='Wali程式碼.html'>Next</a> >> Wali程式碼</div>
+    <div id="tipue_search_content">會議記錄 << <a href='會議記錄.html'>Previous</a> <br /><h1>Wali程式碼</h1>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"># pip install pyzmq cbor keyboard
+from zmqRemoteApi_IPv6 import RemoteAPIClient
+#from zmqRemoteApi import RemoteAPIClient
+import keyboard
+
+#client = RemoteAPIClient('localhost', 23000)
+client = RemoteAPIClient('2001:288:6004:17:2023:cdb:5:2', 23000)
+
+print('Program started')
+sim = client.getObject('sim')
+
+sim.startSimulation()
+print('Simulation started')
+
+def setWaliRobVelocity(leftWheelVelocity, rightWheelVelocity):
+    leftMotor1 = sim.getObject('/leftMotor1')
+    leftMotor2 = sim.getObject('/leftMotor2')
+    rightMotor1 = sim.getObject('/rightMotor1')
+    rightMotor2 = sim.getObject('/rightMotor2')
+    sim.setJointTargetVelocity(leftMotor1, leftWheelVelocity)
+    sim.setJointTargetVelocity(leftMotor2, leftWheelVelocity)
+    sim.setJointTargetVelocity(rightMotor1, rightWheelVelocity)
+    sim.setJointTargetVelocity(rightMotor2, rightWheelVelocity)
+    
+'''
+# Example usage 1:
+setBubbleRobVelocity(1.0, 1.0)
+time.sleep(2)
+setBubbleRobVelocity(0.0, 0.0)
+'''
+# use keyborad to move BubbleRob
+
+while True:
+    if keyboard.is_pressed('5'):
+        setWaliRobVelocity(3.0, 3.0)
+    elif keyboard.is_pressed('8'):
+        setWaliRobVelocity(-3.0, -3.0)
+    elif keyboard.is_pressed('6'):
+        setWaliRobVelocity(-3.0, 3.0)
+    elif keyboard.is_pressed('4'):
+        setWaliRobVelocity(3.0, -3.0)
+    elif keyboard.is_pressed('q'):
+        # stop simulation
+        sim.stopSimulation()
+    else:
+        setWaliRobVelocity(0.0, 0.0)
+
+
+</pre>
+<p><br/><br/></p>
+<p>利用紅綠球控制之程式碼修改成Wali的程式碼</p><br />會議記錄 << <a href='會議記錄.html'>Previous</a> </div>
         
     <!-- footer -->
       <div class="container">
