@@ -174,7 +174,8 @@ doc["add1to100"].bind('click', add)
 <p></p>
 <p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">機器人影片</span></span></p>
 <p><a href="/downloads/wali.7z">瓦利機器人</a></p>
-<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/TPXtui8DTdk" width="560"></iframe></p><h1>協同設計</h1>
+<p><iframe allowfullscreen="allowfullscreen" height="314" src="//www.youtube.com/embed/TPXtui8DTdk" width="560"></iframe></p>
+<h1>協同設計</h1>
 <p><a href="/downloads/新球場 .stl">球場</a></p>
 <p>影片</p>
 <script>
@@ -191,9 +192,12 @@ var winkVideoData = {
 <div class="winkVideoContainerClass"><video autoplay="autoplay" class="winkVideoClass" controls="controls" data-dirname="/cmsimde/static" data-varname="winkVideoData" height="600" muted="true" width="800">
 <source src="/downloads/新球場.mp4" type="video/mp4"/></video></div>
 <h2>分配工作</h2>
+<p>40923130:更改joint與輪子名稱，修改wali程式碼</p>
 <p>41023202:詢問許多同學步驟，首先先製作足球機器人。我是先用solidworks畫出機器人的本體，按照規格所要求的畫。之後再把檔案存成stl檔。接著畫出輪子(含輪框)、軸各為一份檔案。也是存成stl檔案。接著字畫出場地，按照尺寸設計以及需求，也是存成stl檔案。</p>
 <p>41023242:負責主持會議、錄製影片、交代任務，尋找可能會發生哪些問題並盡快提早解決，在5/23、5/24這兩天中找出我們畫的機器人可能有哪些問題</p>
-<p>41023252:負責將機器人裝上轉軸作動，解決cmd及網站倉儲問題。</p><h2>會議記錄</h2>
+<p>41023252:負責將機器人裝上轉軸作動，解決cmd及網站倉儲問題。</p>
+<p></p>
+<h2>會議記錄</h2>
 <p>5/23開會目的:各自設計一個球員</p>
 <p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/zn2uJK3RXy8" title="YouTube video player" width="560"></iframe></p>
 <p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/pC7qJZ27Oq4" title="YouTube video player" width="560"></iframe></p>
@@ -204,3 +208,55 @@ var winkVideoData = {
 <p><iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/1Y7upHTy7Bg" title="YouTube video player" width="560"></iframe></p>
 <p></p>
 <p>5月31日:把各自的機器人做修改並上傳，我們把場地跟球框重畫了，之前是場地球框分開畫，現在我們畫在一起這樣在協同的過程中比較方便進行，最後有讓我們的機器人裝上軸並試著走走看<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" frameborder="0" height="315" src="https://www.youtube.com/embed/MDRZOEa35hU" title="YouTube video player" width="560"></iframe></p>
+<h1>Wali程式碼</h1>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"># pip install pyzmq cbor keyboard
+from zmqRemoteApi_IPv6 import RemoteAPIClient
+#from zmqRemoteApi import RemoteAPIClient
+import keyboard
+
+#client = RemoteAPIClient('localhost', 23000)
+client = RemoteAPIClient('2001:288:6004:17:2023:cdb:5:2', 23000)
+
+print('Program started')
+sim = client.getObject('sim')
+
+sim.startSimulation()
+print('Simulation started')
+
+def setWaliRobVelocity(leftWheelVelocity, rightWheelVelocity):
+    leftMotor1 = sim.getObject('/leftMotor1')
+    leftMotor2 = sim.getObject('/leftMotor2')
+    rightMotor1 = sim.getObject('/rightMotor1')
+    rightMotor2 = sim.getObject('/rightMotor2')
+    sim.setJointTargetVelocity(leftMotor1, leftWheelVelocity)
+    sim.setJointTargetVelocity(leftMotor2, leftWheelVelocity)
+    sim.setJointTargetVelocity(rightMotor1, rightWheelVelocity)
+    sim.setJointTargetVelocity(rightMotor2, rightWheelVelocity)
+    
+'''
+# Example usage 1:
+setBubbleRobVelocity(1.0, 1.0)
+time.sleep(2)
+setBubbleRobVelocity(0.0, 0.0)
+'''
+# use keyborad to move BubbleRob
+
+while True:
+    if keyboard.is_pressed('5'):
+        setWaliRobVelocity(3.0, 3.0)
+    elif keyboard.is_pressed('8'):
+        setWaliRobVelocity(-3.0, -3.0)
+    elif keyboard.is_pressed('6'):
+        setWaliRobVelocity(-3.0, 3.0)
+    elif keyboard.is_pressed('4'):
+        setWaliRobVelocity(3.0, -3.0)
+    elif keyboard.is_pressed('q'):
+        # stop simulation
+        sim.stopSimulation()
+    else:
+        setWaliRobVelocity(0.0, 0.0)
+
+
+</pre>
+<p><br/><br/></p>
+<p>利用紅綠球控制之程式碼修改成Wali的程式碼</p>
