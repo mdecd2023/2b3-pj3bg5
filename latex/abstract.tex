@@ -7,14 +7,16 @@
 \LARGE\textbf{摘~~要}\\
 \end{center}
 \begin{flushleft}
-\fontsize{14pt}{20pt}\sectionef\hspace{12pt}\quad 由於矩陣計算、自動求導技術、開源開發環境、多核GPU運算硬體等這四大發展趨勢，促使AI領域快速發展，藉由這樣的契機，將實體機電系統透過虛擬化訓練提高訓練效率，再將訓練完的模型應用到實體上。\\[12pt]
+\fontsize{14pt}{20pt}\sectionef\hspace{12pt}\quad 此專題的分組需要改用 Python 的 zmqRemoteAPI 來進行控制。需要完成以下任務：使用 zmqRemoteAPI 控制八台雙輪車在足球場中 對戰。此外，還需要設計一個能在雙方瀏覽器中進行計分的系統。每個分組完成後，需要將相關議題、設計操作系統置於各組網站，並完成線上簡報和分組 PDF 報告書。\\[12pt]
 
-\fontsize{14pt}{20pt}\sectionef\hspace{12pt}\quad 此專題是運用實體冰球對打機，將其導入CoppeliaSim模擬環境並給予對應設置，將其機電系統簡化並運用Open AI Gym進行訓練，找到適合此系統的演算法後，再到CoppeliaSim模擬環境中進行測試演算法在實際運用上的可行性。並嘗試透過架設伺服器將CoppeliaSim影像串流到網頁供使用者觀看或操控。\\[12pt]
+\fontsize{14pt}{20pt}\sectionef\hspace{12pt}\quad 關於 zmqRemoteAPI：zmqRemoteAPI 是一個用於 Python 和 CoppeliaSim 之間通訊的工 具。下面是使用 zmqRemoteAPI 相對於其他 Python 和 CoppeliaSim 通訊方法的一些優點和缺點： 
+\begin{enumerate}
+\item 優點：快速高效、使用方便、跨平台兼容性\\
+\item 缺點：與傳統的 Python remoteAPI 相比沒有缺點。\\[12pt]
+\end{enumerate}
 
+\fontsize{14pt}{20pt}\sectionef\hspace{12pt}\quad 使用 zmq Remote API 可以在 Python 中編寫代碼來控制 CoppeliaSim 中的 Bubblerob 模型。並且可以使用 Python 程式碼控制 Bubblerob 的移動和行為，並觀察結果。zmq Remote API 提供了一種高效且跨平台的方式，使 Python 和 CoppeliaSim 之間可以進行快速的通訊和交互。這使得您可以通過編寫 Python 程式碼來操縱和控制 Bubblerob 模型，並進行各種控制實驗。
 \end{flushleft}
-\begin{center}
-\fontsize{14pt}{20pt}\selectfont 關鍵字: 類神經網路、強化學習、\sectionef CoppeliaSim、OpenAI Gym
-\end{center}
 \newpage
 %=--------------------Abstract----------------------=%
 \renewcommand{\baselinestretch}{1.5} %設定行距
@@ -22,9 +24,19 @@
 \begin{center}
 \LARGE\textbf\sectionef{Abstract}\\
 \begin{flushleft}
-\fontsize{14pt}{16pt}\sectionef\hspace{12pt}\quad Due to the four major development trends of multidimensional arrays  computing, automatic differentiation, open source development environment, and multi-core GPUs computing hardware. The rapid development of the AI field has been promoted. In view of this development, the physical mechatronic systems can gain machine learning efficiency through their simulated virtual system training process. And afterwards to apply the trained model into real mechatronic systems.\\[12pt]
+\fontsize{14pt}{16pt}\sectionef\hspace{12pt}\quad The group project requires a switch to Python's zmqRemoteAPI for control. The following tasks need to be accomplished: using zmqRemoteAPI to control eight two-wheeled vehicles for a soccer match on a field. Additionally, a scoring system needs to be designed that allows scoring in both teams' browsers. After each group completes their tasks, they are required to document relevant issues, design the operational system on their respective group websites, and finalize an online presentation and a group PDF report.\\[12pt]
 
-\fontsize{14pt}{16pt}\sectionef\hspace{12pt}\quad This project is to use the physical air hockey to play machine, introduce it into the CoppeliaSim simulation environment and give the corresponding settings, simplify its electromechanical system and use Open AI Gym for training, find an algorithm suitable for this system, and then perform it in the CoppeliaSim simulation environment Feasibility of testing algorithm in practical application. And try to stream CoppeliaSim images to web pages for users to watch or manipulate by setting up a server.\\
+\fontsize{14pt}{16pt}\sectionef\hspace{12pt}\quad Regarding zmqRemoteAPI: zmqRemoteAPI is a communication tool used between Python and CoppeliaSim. Here are some advantages and disadvantages of using zmqRemoteAPI compared to other Python and CoppeliaSim communication methods:\\
+\begin{enumerate}
+\item Advantages:\\
+
+Fast and efficient、Ease of use、Cross-platform compatibility.\\
+\item Disadvantages:\\
+
+There are no specific disadvantages of zmqRemoteAPI compared to traditional Python remoteAPI.\\[12pt]
+\end{enumerate}
+
+\fontsize{14pt}{16pt}\sectionef\hspace{12pt}\quad Using the zmq Remote API, you can write code in Python to control the Bubblerob model in CoppeliaSim. With Python code, you can control the movement and behavior of Bubblerob and observe the results. The zmq Remote API provides an efficient and cross-platform method for fast communication and interaction between Python and CoppeliaSim. This allows you to manipulate and control the Bubblerob model by writing Python code and conduct various control experiments.
 \end{flushleft}
 \begin{center}
 \fontsize{14pt}{16pt}\selectfont\sectionef Keyword:  nerual network、reinforcement learning、 CoppeliaSim、OpenAI Gym
