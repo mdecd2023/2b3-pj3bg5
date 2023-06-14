@@ -141,24 +141,74 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content"> <a href='網站更新步驟.html'>Next</a> >> 網站更新步驟<br /><h1>About</h1>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">組員:</span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">(1)學號:40923115 帳號:</span></span><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">jason60714 ip: <a href="http://[2001:288:6004:17:2023:cdb:5:1]:23020/">[2001:288:6004:17:2023:cdb:5:1]:23020</a></span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;"><span>(2)學號:40923130 帳號:Martin3130 <a href="http://[2001:288:6004:17:2023:cdb:5:2]:23020/">[2001:288:6004:17:2023:cdb:5:2]:23020</a></span></span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">(3)<span>學號:</span>40923235 <span>帳號:</span>40923235  <a href="http://[2001:288:6004:17:2023:cdb:5:3]:23020/">[2001:288:6004:17:2023:cdb:5:3]:23020</a></span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">(4)<span>學號:</span></span></span><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">41023202 <span>帳號:</span>ting0111 <a href="http://[2001:288:6004:17:2023:cdb:5:4]:23020/">[2001:288:6004:17:2023:cdb:5:4]:23020/</a><br/></span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">(5)<span>學號:</span>41023212 <span>帳號:</span>youqui0411<a href="http://[2001:288:6004:17:2023:cdb:5:5]:23020/">[2001:288:6004:17:2023:cdb:5:5]:23020</a></span></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">(6)<span>學號:</span>41023229 <span>帳號:</span>CHI1020    <a href="http://[2001:288:6004:17:2023:cdb:5:6]:23020/">[2001:288:6004:17:2023:cdb:5:6]:23020</a></span></span></p>
-<p>(7)<span>學號:</span>41023242 <span>帳號:</span>41023242  <a href="http://[2001:288:6004:17:2023:cdb:5:7]:23020/"> [2001:288:6004:17:2023:cdb:5:7]:23020</a></p>
-<p>組長:</p>
-<p>(8)<span>學號:</span>41023252 <span>帳號:</span>ZYC0923    <a href="http://[2001:288:6004:17:2023:cdb:5:8]:23020/">[2001:288:6004:17:2023:cdb:5:8]:23020</a></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">倉儲:</span></span></p>
-<p>      <span> <a href="https://github.com/mdecd2023/2b3-pj3bg5">https://github.com/mdecd2023/2b3-pj3bg5</a></span></p>
-<p><span style="vertical-align: inherit;"><span style="vertical-align: inherit;">網站：</span></span></p>
-<p>       <span><a href="https://mdecd2023.github.io/2b3-pj3bg5/content/index.html">https://mdecd2023.github.io/2b3-pj3bg5/content/index.html</a><a href="https://mdecd2023.github.io/2b3-pj3bg5/content/index.html"></a></span></p>
-<p><span></span></p>
-<p><span> </span></p>
-<br /> <a href='網站更新步驟.html'>Next</a> >> 網站更新步驟</div>
+    <div id="tipue_search_content">4輪BubbleRob程式碼 << <a href='4輪BubbleRob程式碼.html'>Previous</a> <a href='分組報告.html'>Next</a> >> 分組報告<br /><h1>記分板程式碼</h1>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
+    score = 0
+    wheelJoint = sim.getObjectHandle('/joint1g')
+    robot = {
+        sim.getObjectHandle('/wali'),
+        sim.getObjectHandle('/wali2'),
+        sim.getObjectHandle('/wali3'),
+        sim.getObjectHandle('/wali4'),
+        sim.getObjectHandle('/bubbleRob1'),
+        sim.getObjectHandle('/bubbleRob2'),
+        sim.getObjectHandle('/bubbleRob3'),
+        sim.getObjectHandle('/bubbleRob4')
+    }
+
+    #給定機器人得分後復歸的位置
+    initialPos = {
+        {1.175, -1.12, 0.21},
+        {1.175, -0.62, 0.21},
+        {1.175, 0, 0.21},
+        {1.175, 0.5, 0.21},
+        {-1.050, 0.57479, 0.21},
+        {-1.050, 0.1002, 0.21},
+        {-1.050, -0.44968, 0.21},
+        {-1.050, -0.97493, 0.21}
+    }
+  #給定機器人得分後的轉向
+    initialOri = {
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0},
+        {0, 0, 0}
+    }
+end
+
+sensor = sim.getObject('./sensor')
+initialPosBall = sim.getObjectPosition(sensor, -1)
+ball = sim.getObject('/ball')
+
+function sysCall_actuation()
+    result = sim.readProximitySensor(sensor)
+    if (result &gt; 0) then
+        score = score + 1
+        sim.setObjectPosition(ball, -1, {-0.15, -0.25, 0.15}) #球的分後復歸的位置
+        
+        -- Rotate the wheel joint by 36 degrees
+        local currentAngle = sim.getJointPosition(wheelJoint)
+        local targetAngle = currentAngle + math.rad(-36)
+        sim.setJointTargetPosition(wheelJoint, targetAngle)
+        
+        for i = 1, 8 do
+            sim.setObjectPosition(robot[i], -1, initialPos[i])
+        end
+        #對機器人5~8 針對機器人坐標系 給定上面設定位置
+        for i = 5, 8 do
+            sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
+        end
+          #對機器人1~4 針對機器人坐標系 給定上面設定位置
+        for i = 1, 4 do
+            sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
+        end
+    end
+end</pre>
+<p></p><br />4輪BubbleRob程式碼 << <a href='4輪BubbleRob程式碼.html'>Previous</a> <a href='分組報告.html'>Next</a> >> 分組報告</div>
         
     <!-- footer -->
       <div class="container">
