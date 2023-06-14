@@ -162,8 +162,7 @@ doc["add1to100"].bind('click', add)
 <p>場景(修改)</p>
 <p><img alt="" height="487" src="/images/場景.png" width="660"/></p>
 <p><a href="/downloads/pj3場景.7z">PJ3場景</a></p>
-<p><a href="/downloads/pj3-5.zip">完整版</a></p>
-<h1>進球顯示背號</h1>
+<p><a href="/downloads/pj3-5.zip">完整版</a></p><h1>進球顯示背號</h1>
 <p><iframe allowfullscreen="allowfullscreen" height="300" src="//www.youtube.com/embed/RqjqFnNErK8" width="500"></iframe></p>
 <p><a href="https://cad.onshape.com/documents/d5cb45e508a1134c61930b46/w/eeda24b42c0ba5120059f454/e/0655321dc9bfcf5524b7964e?renderMode=0&amp;uiState=6489d21414c0c379ad6e613d">背號版</a></p>
 <h1>記分板</h1>
@@ -422,16 +421,16 @@ while True:
 <h1>記分板程式碼</h1>
 <pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">function sysCall_init()
     score = 0
-    wheelJoint = sim.getObjectHandle('/joint1g')
+    wheelJoint = sim.getObjectHandle('/joint1r')
     robot = {
-        sim.getObjectHandle('/wali'),
+        sim.getObjectHandle('/wali1'),
         sim.getObjectHandle('/wali2'),
         sim.getObjectHandle('/wali3'),
         sim.getObjectHandle('/wali4'),
-        sim.getObjectHandle('/bubbleRob1'),
-        sim.getObjectHandle('/bubbleRob2'),
-        sim.getObjectHandle('/bubbleRob3'),
-        sim.getObjectHandle('/bubbleRob4')
+        sim.getObjectHandle('/bubbleRob5'),
+        sim.getObjectHandle('/bubbleRob6'),
+        sim.getObjectHandle('/bubbleRob7'),
+        sim.getObjectHandle('/bubbleRob8')
     }
 
     #給定機器人得分後復歸的位置
@@ -445,7 +444,7 @@ while True:
         {-1.050, -0.44968, 0.21},
         {-1.050, -0.97493, 0.21}
     }
-  #給定機器人得分後的轉向
+  #給定機器人得分後的轉向  
     initialOri = {
         {0, 0, 0},
         {0, 0, 0},
@@ -456,6 +455,33 @@ while True:
         {0, 0, 0},
         {0, 0, 0}
     }
+    displayHandles = {
+        sim.getObjectHandle('/display1'),
+        sim.getObjectHandle('/display2'),
+        sim.getObjectHandle('/display3'),
+        sim.getObjectHandle('/display4'),
+        sim.getObjectHandle('/display5'),
+        sim.getObjectHandle('/display6'),
+        sim.getObjectHandle('/display7')
+    }
+    displayParameters = {
+        {0, 0, 1, 0, 0, 1, 0},
+        {1, 0, 1, 1, 1, 0, 1},
+        {1, 0, 1, 1, 0, 1, 1},
+        {0, 1, 1, 1, 0, 1, 0},
+        {1, 1, 0, 1, 0, 1, 1},
+        {1, 1, 0, 1, 1, 1, 1},
+        {1, 0, 1, 0, 0, 1, 0},
+        {1, 1, 1, 1, 1, 1, 1}
+    }
+    goalEffectEnabled = false
+    lastGoalPlayer = nil
+    flashingState = false
+    flashingTimer = 0
+    goalHandle = sim.getObjectHandle('/goal')
+    flashingDuration = 0.5
+    flashingTimer = 0 
+    isFlashing = false
 end
 
 sensor = sim.getObject('./sensor')
@@ -466,28 +492,50 @@ function sysCall_actuation()
     result = sim.readProximitySensor(sensor)
     if (result &gt; 0) then
         score = score + 1
-        sim.setObjectPosition(ball, -1, {-0.15, -0.25, 0.15}) #球的分後復歸的位置
+        sim.setObjectPosition(ball, -1, {-0.15,-0.25,0.15})
         
         -- Rotate the wheel joint by 36 degrees
-        local currentAngle = sim.getJointPosition(wheelJoint)
+        local currentAngle = sim.getJointPosition( wheelJoint)
         local targetAngle = currentAngle + math.rad(-36)
-        sim.setJointTargetPosition(wheelJoint, targetAngle)
-        
-        for i = 1, 8 do
-            sim.setObjectPosition(robot[i], -1, initialPos[i])
-        end
-        #對機器人5~8 針對機器人坐標系 給定上面設定位置
+        sim.setJointTargetPosition( wheelJoint, targetAngle)
+        #對機器人5~8 針對場景坐標系(-1) 給定上面設定位置 
         for i = 5, 8 do
+            sim.setObjectPosition(robot[i], -1, initialPos[i])
+            sim.setObjectOrientation(robot[i], -1, initialOri[i])
+        end
+        #對機器人1~4 針對機器人坐標系( robot[i]) 給定上面設定位置
+         for i = 1, 4 do
             sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
         end
-          #對機器人1~4 針對機器人坐標系 給定上面設定位置
-        for i = 1, 4 do
-            sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
+        
+        goalEffectEnabled = true
+        lastGoalPlayer = result
+        flashingState = false
+        flashingTimer = 0
+    end
+    
+    if goalEffectEnabled then
+        if not isFlashing then
+            flashingTimer = flashingTimer + sim.getSimulationTimeStep()
+            if flashingTimer &gt;= flashingDuration then
+                isFlashing = true
+                sim.setShapeColor(goalHandle, nil, sim.colorcomponent_ambient_diffuse, {1, 0.9, 0})
+            end
+        elseif isFlashing then
+            flashingTimer = flashingTimer + sim.getSimulationTimeStep()
+            if flashingTimer &gt;= flashingDuration + 3 then
+                goalEffectEnabled = false
+                isFlashing = false
+                sim.setShapeColor(goalHandle, nil, sim.colorcomponent_ambient_diffuse, {0, 0, 0})
+            end
         end
     end
+end
+
+function sysCall_cleanup()
+    sim.setShapeColor(goalHandle, nil, sim.colorcomponent_ambient_diffuse,{0, 0, 0})
 end</pre>
-<p></p>
-<h1>連線教學</h1>
+<p></p><h1>連線教學</h1>
 <p><img alt="" height="476" src="/images/1.png" width="846"/></p>
 <p>進入防火牆進階設定，並且輸入規則。</p>
 <p><img alt="" height="476" src="/images/2.png" width="846"/></p>
