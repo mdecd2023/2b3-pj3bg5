@@ -430,7 +430,7 @@ while True:
         sim.getObjectHandle('/bubbleRob4')
     }
 
-    
+    #給定機器人得分後復歸的位置
     initialPos = {
         {1.175, -1.12, 0.21},
         {1.175, -0.62, 0.21},
@@ -441,7 +441,7 @@ while True:
         {-1.050, -0.44968, 0.21},
         {-1.050, -0.97493, 0.21}
     }
-    
+  #給定機器人得分後的轉向
     initialOri = {
         {0, 0, 0},
         {0, 0, 0},
@@ -462,7 +462,7 @@ function sysCall_actuation()
     result = sim.readProximitySensor(sensor)
     if (result &gt; 0) then
         score = score + 1
-        sim.setObjectPosition(ball, -1, {-0.15, -0.25, 0.15})
+        sim.setObjectPosition(ball, -1, {-0.15, -0.25, 0.15}) #球的分後復歸的位置
         
         -- Rotate the wheel joint by 36 degrees
         local currentAngle = sim.getJointPosition(wheelJoint)
@@ -472,11 +472,11 @@ function sysCall_actuation()
         for i = 1, 8 do
             sim.setObjectPosition(robot[i], -1, initialPos[i])
         end
-        
+        #對機器人5~8 針對機器人坐標系 給定上面設定位置
         for i = 5, 8 do
             sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
         end
-        
+          #對機器人1~4 針對機器人坐標系 給定上面設定位置
         for i = 1, 4 do
             sim.setObjectOrientation(robot[i], robot[i], initialOri[i])
         end
